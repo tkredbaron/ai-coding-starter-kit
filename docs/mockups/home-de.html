@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>red baron werbeagentur — Mockup</title>
+<style>
+  :root{
+    --bg:#0a0a0b; --bg-2:#101013; --bg-3:#16161a;
+    --fg:#f4f2ef; --fg-dim:#9b988f; --fg-faint:#5c5a54;
+    --red:#e30613; --red-deep:#8f040c;
+    --line:rgba(244,242,239,.08);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--fg);font-family:-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  ::selection{background:var(--red);color:#fff}
+
+  /* ---------- header ---------- */
+  header{position:fixed;inset:0 0 auto 0;z-index:50;display:flex;align-items:center;justify-content:space-between;
+    padding:0 48px;height:76px;background:rgba(10,10,11,.82);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+  .logo{display:flex;flex-direction:column;line-height:1.05;text-decoration:none;color:var(--fg)}
+  .logo b{font-size:21px;font-weight:800;letter-spacing:-.02em}
+  .logo b span{color:var(--red)}
+  .logo small{font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--fg-dim);margin-top:3px}
+  nav{display:flex;align-items:center;gap:36px}
+  nav a{color:var(--fg-dim);text-decoration:none;font-size:14.5px;letter-spacing:.02em;transition:color .2s}
+  nav a:hover{color:var(--fg)}
+  nav a.active{color:var(--fg)}
+  .lang{display:flex;gap:2px;border:1px solid var(--line);border-radius:99px;padding:3px;font-size:12.5px}
+  .lang span{padding:4px 11px;border-radius:99px;color:var(--fg-dim)}
+  .lang span.on{background:var(--fg);color:var(--bg);font-weight:600}
+  .btn{display:inline-block;background:var(--red);color:#fff;text-decoration:none;font-weight:600;font-size:14.5px;
+    padding:12px 26px;border-radius:99px;letter-spacing:.01em;box-shadow:0 0 32px rgba(227,6,19,.35);transition:transform .2s}
+  .btn:hover{transform:translateY(-1px)}
+  .progress{position:absolute;left:0;bottom:-1px;height:2px;width:34%;background:var(--red)}
+
+  /* ---------- hero ---------- */
+  .hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:140px 48px 80px;position:relative}
+  .hero::before{content:"";position:absolute;inset:0;
+    background:radial-gradient(60% 50% at 72% 30%,rgba(227,6,19,.14),transparent 70%),
+               radial-gradient(40% 35% at 15% 85%,rgba(227,6,19,.07),transparent 70%);pointer-events:none}
+  .contrail{position:absolute;top:24%;left:-5%;width:110%;height:2px;pointer-events:none;
+    background:linear-gradient(90deg,transparent,rgba(227,6,19,.0) 30%,rgba(227,6,19,.85) 62%,rgba(227,6,19,.0) 98%);transform:rotate(-7deg)}
+  .contrail::after{content:"";position:absolute;right:2.5%;top:-4px;width:10px;height:10px;border-radius:50%;
+    background:var(--red);box-shadow:0 0 24px 6px rgba(227,6,19,.7)}
+  .kicker{font-size:13px;letter-spacing:.34em;text-transform:uppercase;color:var(--red);font-weight:700;margin-bottom:28px}
+  h1{font-size:clamp(64px,11vw,158px);line-height:.94;font-weight:800;letter-spacing:-.045em}
+  h1 .alt{color:transparent;-webkit-text-stroke:1.5px var(--fg);display:block}
+  h1 .dot{color:var(--red)}
+  .sub{margin-top:36px;font-size:clamp(17px,1.6vw,22px);color:var(--fg-dim);max-width:560px;line-height:1.55}
+  .hero-cta{margin-top:44px;display:flex;align-items:center;gap:28px}
+  .btn-lg{padding:17px 38px;font-size:16px}
+  .ghost{color:var(--fg);text-decoration:none;font-size:15.5px;border-bottom:1px solid var(--fg-faint);padding-bottom:3px}
+  .scroll-hint{position:absolute;bottom:34px;left:48px;display:flex;align-items:center;gap:12px;color:var(--fg-faint);font-size:12px;letter-spacing:.22em;text-transform:uppercase}
+  .scroll-hint i{display:block;width:1px;height:46px;background:linear-gradient(var(--red),transparent)}
+
+  /* ---------- sections ---------- */
+  section{padding:120px 48px}
+  .sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:24px;margin-bottom:64px;max-width:1280px;margin-inline:auto}
+  .sec-head h2{font-size:clamp(38px,5vw,64px);font-weight:800;letter-spacing:-.03em;line-height:1.02}
+  .sec-head h2 em{font-style:normal;color:var(--red)}
+  .sec-head p{color:var(--fg-dim);max-width:330px;font-size:15.5px;line-height:1.6}
+  .num{font-size:13px;color:var(--red);font-weight:700;letter-spacing:.3em;display:block;margin-bottom:14px}
+
+  /* services */
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:1280px;margin:0 auto}
+  .card{background:var(--bg-2);border:1px solid var(--line);border-radius:20px;padding:42px 40px 38px;position:relative;overflow:hidden;transition:border-color .25s}
+  .card:hover{border-color:rgba(227,6,19,.5)}
+  .card::after{content:"";position:absolute;left:40px;right:40px;bottom:0;height:2px;background:var(--red);transform:scaleX(0);transform-origin:left;transition:transform .35s}
+  .card:hover::after{transform:scaleX(1)}
+  .card .idx{font-size:12.5px;color:var(--fg-faint);letter-spacing:.25em;font-weight:600}
+  .card h3{font-size:27px;font-weight:750;letter-spacing:-.02em;margin:50px 0 6px}
+  .card h4{font-size:15px;color:var(--red);font-weight:600;margin-bottom:16px}
+  .card p{color:var(--fg-dim);font-size:15px;line-height:1.65}
+  .card a{display:inline-block;margin-top:26px;color:var(--fg);font-size:14.5px;text-decoration:none;border-bottom:1px solid var(--red);padding-bottom:2px}
+
+  /* contact */
+  .contact{background:var(--bg-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .c-wrap{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:1.05fr .95fr;gap:90px}
+  .c-left h2{font-size:clamp(40px,5vw,62px);font-weight:800;letter-spacing:-.03em;line-height:1.04}
+  .c-left h2 em{font-style:normal;color:var(--red)}
+  .c-left .lead{margin-top:22px;color:var(--fg-dim);font-size:17px;line-height:1.6;max-width:430px}
+  .c-direct{margin-top:46px;display:flex;flex-direction:column;gap:18px}
+  .c-direct div{display:flex;align-items:center;gap:16px;font-size:16px}
+  .c-direct .ic{width:42px;height:42px;border-radius:12px;background:var(--bg-3);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--red);font-size:17px}
+  .c-direct b{font-weight:650}
+  .c-direct small{display:block;color:var(--fg-faint);font-size:12.5px;margin-top:1px}
+  form{background:var(--bg);border:1px solid var(--line);border-radius:22px;padding:38px}
+  .f-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  label{display:block;font-size:12.5px;letter-spacing:.06em;color:var(--fg-dim);margin:0 0 7px 2px}
+  input,textarea{width:100%;background:var(--bg-3);border:1px solid var(--line);border-radius:12px;color:var(--fg);
+    padding:13px 15px;font-size:15px;font-family:inherit;margin-bottom:18px}
+  input::placeholder,textarea::placeholder{color:var(--fg-faint)}
+  textarea{height:110px;resize:none}
+  .consent{display:flex;gap:11px;font-size:12.8px;color:var(--fg-dim);line-height:1.5;margin:2px 0 22px}
+  .consent .box{flex:none;width:17px;height:17px;border:1.5px solid var(--fg-faint);border-radius:5px;margin-top:1px}
+  .consent a{color:var(--fg);text-decoration:underline}
+  .submit{width:100%;border:0;cursor:pointer}
+  .under{margin-top:14px;text-align:center;color:var(--fg-faint);font-size:12.8px}
+
+  /* footer */
+  footer{padding:64px 48px 40px}
+  .f-wrap{max-width:1280px;margin:0 auto}
+  .trust{display:flex;justify-content:space-between;align-items:center;gap:24px;padding-bottom:34px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+  .trust b{font-size:17px;font-weight:700}
+  .trust b span{color:var(--red)}
+  .trust p{color:var(--fg-dim);font-size:14px}
+  .f-bottom{display:flex;justify-content:space-between;align-items:center;gap:20px;padding-top:26px;color:var(--fg-faint);font-size:13px;flex-wrap:wrap}
+  .f-bottom a{color:var(--fg-dim);text-decoration:none;margin-left:22px}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="#"><b>red<span>&nbsp;baron</span></b><small>Werbeagentur · Kevelaer</small></a>
+  <nav>
+    <a class="active" href="#">Start</a>
+    <a href="#leistungen">Leistungen</a>
+    <a href="#kontakt">Kontakt</a>
+    <div class="lang"><span class="on">DE</span><span>EN</span></div>
+    <a class="btn" href="#kontakt">Projekt anfragen</a>
+  </nav>
+  <div class="progress"></div>
+</header>
+
+<section class="hero">
+  <div class="contrail"></div>
+  <div class="kicker">Werbeagentur am Niederrhein — seit 2003</div>
+  <h1>Sichtbar<span class="dot">.</span><span class="alt">Anders.</span></h1>
+  <p class="sub">Webdesign, Marken &amp; Marketing vom Niederrhein — inhabergeführt seit 2003. Kein Callcenter, keine Praktikanten-Schleife: Sie sprechen direkt mit dem Inhaber.</p>
+  <div class="hero-cta">
+    <a class="btn btn-lg" href="#kontakt">Projekt anfragen</a>
+    <a class="ghost" href="#leistungen">Leistungen ansehen&nbsp;→</a>
+  </div>
+  <div class="scroll-hint"><i></i> Mehr sehen</div>
+</section>
+
+<section id="leistungen">
+  <div class="sec-head">
+    <div><span class="num">01 — LEISTUNGEN</span>
+      <h2>Werbung, die <em>sitzt.</em></h2></div>
+    <p>Vier Disziplinen, ein Anspruch: dass Ihr Unternehmen so gut aussieht, wie es wirklich ist.</p>
+  </div>
+  <div class="grid">
+    <div class="card"><span class="idx">/ 01</span>
+      <h3>Webdesign</h3><h4>Der erste Händedruck Ihrer Firma</h4>
+      <p>Bevor jemand Sie anruft, googelt er Sie. Wir bauen Websites, die diesen ersten Moment gewinnen — schnell, klar und so überzeugend, dass aus Besuchern Anfragen werden. Diese Seite hier? Ist unser Beweis.</p>
+      <a href="#kontakt">Zeigen Sie mir meine Website-Chancen</a></div>
+    <div class="card"><span class="idx">/ 02</span>
+      <h3>Corporate Design</h3><h4>Unverwechselbar werden</h4>
+      <p>Ein gutes Erscheinungsbild macht aus einem Betrieb eine Marke, die man wiedererkennt — auf dem Firmenwagen, der Visitenkarte, dem Bildschirm. Wir geben Ihrem Unternehmen ein Gesicht, das bleibt.</p>
+      <a href="#kontakt">Wie wirkt mein Auftritt heute?</a></div>
+    <div class="card"><span class="idx">/ 03</span>
+      <h3>Marketing &amp; Markenaufbau</h3><h4>Vom Geheimtipp zur ersten Wahl</h4>
+      <p>Gute Arbeit allein reicht nicht — die richtigen Leute müssen davon erfahren. Wir entwickeln mit Ihnen eine Marke und Strategie, die Schritt für Schritt Vertrauen aufbaut. Auch, wenn Sie ganz am Anfang stehen.</p>
+      <a href="#kontakt">Erzählen Sie uns von Ihrer Idee</a></div>
+    <div class="card"><span class="idx">/ 04</span>
+      <h3>Print</h3><h4>Was man in der Hand hält, bleibt im Kopf</h4>
+      <p>In einer Welt voller Bildschirme ist Gedrucktes ein Statement. Broschüren, Geschäftsausstattung, Drucksachen — gestaltet, dass man Qualität fühlt, bevor man sie liest. Digital und Print aus einer Hand.</p>
+      <a href="#kontakt">Was soll Ihr nächstes Druckstück erreichen?</a></div>
+  </div>
+</section>
+
+<section class="contact" id="kontakt">
+  <div class="c-wrap">
+    <div class="c-left">
+      <span class="num">02 — KONTAKT</span>
+      <h2>Lassen Sie uns reden. <em>Direkt mit Tobias.</em></h2>
+      <p class="lead">Kein Callcenter, kein Vertrieb — Ihre Nachricht landet direkt bei mir. Unverbindlich, kostenlos und auf Wunsch bei einem Kaffee in Kevelaer.</p>
+      <div class="c-direct">
+        <div><span class="ic">✆</span><div><b>02832 974222</b><small>Direkter Draht — Sie sprechen mit dem Inhaber</small></div></div>
+        <div><span class="ic">@</span><div><b>tk@red-baron.de</b><small>Antwort innerhalb von 24 Stunden (werktags)</small></div></div>
+        <div><span class="ic">⌂</span><div><b>Ahornweg 26, 47624 Kevelaer</b><small>Am Niederrhein zuhause — seit 2003</small></div></div>
+      </div>
+    </div>
+    <form>
+      <div class="f-row">
+        <div><label>Name *</label><input placeholder="Ihr Name"></div>
+        <div><label>E-Mail *</label><input placeholder="ihre@email.de"></div>
+      </div>
+      <label>Telefon (optional — falls Sie lieber telefonieren)</label>
+      <input placeholder="0123 456789">
+      <label>Nachricht *</label>
+      <textarea placeholder="Erzählen Sie kurz, worum es geht — zwei Sätze reichen."></textarea>
+      <div class="consent"><span class="box"></span><span>Ihre Daten nutze ich ausschließlich, um Ihre Anfrage zu beantworten — keine Newsletter, keine Weitergabe. Details: <a href="#">Datenschutzerklärung</a></span></div>
+      <button class="btn btn-lg submit">Nachricht an Tobias senden</button>
+      <p class="under">Unverbindlich &amp; kostenlos · Persönliche Antwort innerhalb von 24 Stunden</p>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="f-wrap">
+    <div class="trust">
+      <b>red<span> baron</span> werbeagentur</b>
+      <p>Inhabergeführt am Niederrhein — seit 2003. · Ahornweg 26, 47624 Kevelaer · 02832 974222</p>
+    </div>
+    <div class="f-bottom">
+      <span>Gestaltet &amp; entwickelt in Kevelaer. · Diese Seite lädt in unter einer Sekunde. Ihre auch?</span>
+      <span><a href="#">Impressum</a><a href="#">Datenschutz</a></span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
