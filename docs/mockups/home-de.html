@@ -3,204 +3,262 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>red baron werbeagentur — Mockup</title>
+<title>red baron werbeagentur — Mockup V2</title>
 <style>
+  @font-face{font-family:'Archivo Var';src:url('fonts/archivo-latin-wdth-normal.woff2') format('woff2');
+    font-weight:100 900;font-stretch:62% 125%;font-display:block}
+  @font-face{font-family:'Space Grotesk';src:url('fonts/space-grotesk-latin-400-normal.woff2') format('woff2');font-weight:400}
+  @font-face{font-family:'Space Grotesk';src:url('fonts/space-grotesk-latin-500-normal.woff2') format('woff2');font-weight:500}
+
   :root{
-    --bg:#0a0a0b; --bg-2:#101013; --bg-3:#16161a;
-    --fg:#f4f2ef; --fg-dim:#9b988f; --fg-faint:#5c5a54;
-    --red:#e30613; --red-deep:#8f040c;
-    --line:rgba(244,242,239,.08);
+    --bg:#070605; --ink:#ECE7DE; --dim:#8F8A80; --faint:#4A463F;
+    --red:#E30613; --red-hot:#FF2230;
+    --line:rgba(236,231,222,.10); --line-strong:rgba(236,231,222,.18);
+    --disp:'Archivo Var',Impact,sans-serif;
+    --body:'Space Grotesk',ui-monospace,monospace;
   }
   *{margin:0;padding:0;box-sizing:border-box}
-  html{scroll-behavior:smooth}
-  body{background:var(--bg);color:var(--fg);font-family:-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);font-weight:400;
+    -webkit-font-smoothing:antialiased;overflow-x:hidden}
   ::selection{background:var(--red);color:#fff}
 
+  /* film grain + column grid overlay */
+  body::before{content:"";position:fixed;inset:0;z-index:99;pointer-events:none;opacity:.5;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .06 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
+  .cols{position:fixed;inset:0;z-index:0;pointer-events:none;display:flex;justify-content:space-between;padding:0 4vw}
+  .cols i{width:1px;background:var(--line);opacity:.45}
+
+  .disp{font-family:var(--disp);font-variation-settings:'wdth' 125;font-weight:860;
+    text-transform:uppercase;letter-spacing:-.015em}
+  .mono{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--dim)}
+  .red{color:var(--red)}
+
   /* ---------- header ---------- */
-  header{position:fixed;inset:0 0 auto 0;z-index:50;display:flex;align-items:center;justify-content:space-between;
-    padding:0 48px;height:76px;background:rgba(10,10,11,.82);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
-  .logo{display:flex;flex-direction:column;line-height:1.05;text-decoration:none;color:var(--fg)}
-  .logo b{font-size:21px;font-weight:800;letter-spacing:-.02em}
-  .logo b span{color:var(--red)}
-  .logo small{font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--fg-dim);margin-top:3px}
-  nav{display:flex;align-items:center;gap:36px}
-  nav a{color:var(--fg-dim);text-decoration:none;font-size:14.5px;letter-spacing:.02em;transition:color .2s}
-  nav a:hover{color:var(--fg)}
-  nav a.active{color:var(--fg)}
-  .lang{display:flex;gap:2px;border:1px solid var(--line);border-radius:99px;padding:3px;font-size:12.5px}
-  .lang span{padding:4px 11px;border-radius:99px;color:var(--fg-dim)}
-  .lang span.on{background:var(--fg);color:var(--bg);font-weight:600}
-  .btn{display:inline-block;background:var(--red);color:#fff;text-decoration:none;font-weight:600;font-size:14.5px;
-    padding:12px 26px;border-radius:99px;letter-spacing:.01em;box-shadow:0 0 32px rgba(227,6,19,.35);transition:transform .2s}
-  .btn:hover{transform:translateY(-1px)}
-  .progress{position:absolute;left:0;bottom:-1px;height:2px;width:34%;background:var(--red)}
+  header{position:fixed;inset:0 0 auto 0;z-index:50;display:flex;align-items:stretch;
+    border-bottom:1px solid var(--line);background:rgba(7,6,5,.78);backdrop-filter:blur(10px);height:62px}
+  header>*{display:flex;align-items:center}
+  .h-logo{padding:0 4vw;border-right:1px solid var(--line);font-family:var(--disp);
+    font-variation-settings:'wdth' 125;font-weight:860;text-transform:uppercase;font-size:17px;letter-spacing:0}
+  .h-logo b{color:var(--red);font-weight:860}
+  .h-meta{flex:1;padding:0 28px;gap:28px}
+  .h-meta a{color:var(--dim);text-decoration:none;font-size:11px;letter-spacing:.24em;text-transform:uppercase}
+  .h-meta a.on{color:var(--ink)}
+  .h-lang{padding:0 24px;border-left:1px solid var(--line);gap:14px;font-size:11px;letter-spacing:.2em}
+  .h-lang span{color:var(--faint)} .h-lang span.on{color:var(--ink);border-bottom:1px solid var(--red);padding-bottom:2px}
+  .h-cta{background:var(--red);color:#fff;padding:0 34px;font-size:11.5px;letter-spacing:.22em;
+    text-transform:uppercase;text-decoration:none;font-weight:500}
 
   /* ---------- hero ---------- */
-  .hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:140px 48px 80px;position:relative}
-  .hero::before{content:"";position:absolute;inset:0;
-    background:radial-gradient(60% 50% at 72% 30%,rgba(227,6,19,.14),transparent 70%),
-               radial-gradient(40% 35% at 15% 85%,rgba(227,6,19,.07),transparent 70%);pointer-events:none}
-  .contrail{position:absolute;top:24%;left:-5%;width:110%;height:2px;pointer-events:none;
-    background:linear-gradient(90deg,transparent,rgba(227,6,19,.0) 30%,rgba(227,6,19,.85) 62%,rgba(227,6,19,.0) 98%);transform:rotate(-7deg)}
-  .contrail::after{content:"";position:absolute;right:2.5%;top:-4px;width:10px;height:10px;border-radius:50%;
-    background:var(--red);box-shadow:0 0 24px 6px rgba(227,6,19,.7)}
-  .kicker{font-size:13px;letter-spacing:.34em;text-transform:uppercase;color:var(--red);font-weight:700;margin-bottom:28px}
-  h1{font-size:clamp(64px,11vw,158px);line-height:.94;font-weight:800;letter-spacing:-.045em}
-  h1 .alt{color:transparent;-webkit-text-stroke:1.5px var(--fg);display:block}
+  .hero{position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;
+    padding:110px 4vw 0;z-index:1}
+  .orb{position:absolute;top:-19vw;right:-17vw;width:44vw;height:44vw;border-radius:50%;
+    background:radial-gradient(circle at 38% 38%,var(--red-hot),var(--red) 45%,#52030a 78%,transparent 79%);
+    filter:blur(2px);opacity:.92}
+  .orb::after{content:"";position:absolute;inset:-18%;border-radius:50%;
+    background:radial-gradient(circle,rgba(227,6,19,.35),transparent 60%);filter:blur(40px)}
+  .hero-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:auto;padding-top:5vh}
+  .hero-top .mono{max-width:200px;line-height:1.9}
+  .hero-sub{position:relative;z-index:2;align-self:flex-end;max-width:330px;margin:0 2vw 5.5vh 0;text-align:left;
+    font-size:15px;line-height:1.7;color:var(--dim);text-shadow:0 1px 14px rgba(7,6,5,.8)}
+  .hero-sub b{color:var(--ink);font-weight:500}
+  .hero-sub .mono{display:block;margin-bottom:14px;color:var(--red)}
+  h1{font-family:var(--disp);font-variation-settings:'wdth' 122;font-weight:880;text-transform:uppercase;
+    font-size:13.4vw;line-height:.84;letter-spacing:-.02em;margin-left:-.06em}
+  h1 .l2{display:flex;align-items:baseline;gap:2vw}
+  h1 .outline{color:transparent;-webkit-text-stroke:2px var(--ink)}
   h1 .dot{color:var(--red)}
-  .sub{margin-top:36px;font-size:clamp(17px,1.6vw,22px);color:var(--fg-dim);max-width:560px;line-height:1.55}
-  .hero-cta{margin-top:44px;display:flex;align-items:center;gap:28px}
-  .btn-lg{padding:17px 38px;font-size:16px}
-  .ghost{color:var(--fg);text-decoration:none;font-size:15.5px;border-bottom:1px solid var(--fg-faint);padding-bottom:3px}
-  .scroll-hint{position:absolute;bottom:34px;left:48px;display:flex;align-items:center;gap:12px;color:var(--fg-faint);font-size:12px;letter-spacing:.22em;text-transform:uppercase}
-  .scroll-hint i{display:block;width:1px;height:46px;background:linear-gradient(var(--red),transparent)}
+  h1 .tag{font-family:var(--body);font-size:12px;letter-spacing:.3em;color:var(--dim);
+    text-transform:uppercase;font-weight:400;-webkit-text-stroke:0;white-space:nowrap;transform:translateY(-1.2vw)}
+  .hero-bar{display:flex;justify-content:space-between;border-top:1px solid var(--line-strong);
+    margin:4.5vh -4vw 0;padding:20px 4vw 22px;position:relative;z-index:2;background:rgba(7,6,5,.6)}
+  .hero-bar .mono b{color:var(--ink);font-weight:500}
 
-  /* ---------- sections ---------- */
-  section{padding:120px 48px}
-  .sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:24px;margin-bottom:64px;max-width:1280px;margin-inline:auto}
-  .sec-head h2{font-size:clamp(38px,5vw,64px);font-weight:800;letter-spacing:-.03em;line-height:1.02}
-  .sec-head h2 em{font-style:normal;color:var(--red)}
-  .sec-head p{color:var(--fg-dim);max-width:330px;font-size:15.5px;line-height:1.6}
-  .num{font-size:13px;color:var(--red);font-weight:700;letter-spacing:.3em;display:block;margin-bottom:14px}
+  /* ---------- marquee ---------- */
+  .marquee{border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+    padding:18px 0;white-space:nowrap;overflow:hidden;position:relative;z-index:1}
+  .marquee span{font-family:var(--disp);font-variation-settings:'wdth' 125;font-weight:800;
+    text-transform:uppercase;font-size:30px;letter-spacing:.02em;color:transparent;
+    -webkit-text-stroke:1px var(--dim);padding-right:8px}
+  .marquee b{color:var(--red);-webkit-text-stroke:0;font-weight:800}
 
-  /* services */
-  .grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:1280px;margin:0 auto}
-  .card{background:var(--bg-2);border:1px solid var(--line);border-radius:20px;padding:42px 40px 38px;position:relative;overflow:hidden;transition:border-color .25s}
-  .card:hover{border-color:rgba(227,6,19,.5)}
-  .card::after{content:"";position:absolute;left:40px;right:40px;bottom:0;height:2px;background:var(--red);transform:scaleX(0);transform-origin:left;transition:transform .35s}
-  .card:hover::after{transform:scaleX(1)}
-  .card .idx{font-size:12.5px;color:var(--fg-faint);letter-spacing:.25em;font-weight:600}
-  .card h3{font-size:27px;font-weight:750;letter-spacing:-.02em;margin:50px 0 6px}
-  .card h4{font-size:15px;color:var(--red);font-weight:600;margin-bottom:16px}
-  .card p{color:var(--fg-dim);font-size:15px;line-height:1.65}
-  .card a{display:inline-block;margin-top:26px;color:var(--fg);font-size:14.5px;text-decoration:none;border-bottom:1px solid var(--red);padding-bottom:2px}
+  /* ---------- manifesto ---------- */
+  .mani{padding:18vh 4vw;position:relative;z-index:1}
+  .mani .mono{margin-bottom:5vh}
+  .mani p.big{font-family:var(--disp);font-variation-settings:'wdth' 112;font-weight:700;text-transform:none;
+    font-size:clamp(30px,4.6vw,68px);line-height:1.08;letter-spacing:-.02em;max-width:1300px}
+  .mani p.big .ghost{color:transparent;-webkit-text-stroke:1.5px var(--faint)}
+  .mani p.big em{font-style:normal;color:var(--red)}
+  .mani .sig{margin-top:6vh;display:flex;gap:18px;align-items:center}
+  .mani .sig i{width:64px;height:1px;background:var(--red);display:block}
 
-  /* contact */
-  .contact{background:var(--bg-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-  .c-wrap{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:1.05fr .95fr;gap:90px}
-  .c-left h2{font-size:clamp(40px,5vw,62px);font-weight:800;letter-spacing:-.03em;line-height:1.04}
-  .c-left h2 em{font-style:normal;color:var(--red)}
-  .c-left .lead{margin-top:22px;color:var(--fg-dim);font-size:17px;line-height:1.6;max-width:430px}
-  .c-direct{margin-top:46px;display:flex;flex-direction:column;gap:18px}
-  .c-direct div{display:flex;align-items:center;gap:16px;font-size:16px}
-  .c-direct .ic{width:42px;height:42px;border-radius:12px;background:var(--bg-3);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--red);font-size:17px}
-  .c-direct b{font-weight:650}
-  .c-direct small{display:block;color:var(--fg-faint);font-size:12.5px;margin-top:1px}
-  form{background:var(--bg);border:1px solid var(--line);border-radius:22px;padding:38px}
-  .f-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-  label{display:block;font-size:12.5px;letter-spacing:.06em;color:var(--fg-dim);margin:0 0 7px 2px}
-  input,textarea{width:100%;background:var(--bg-3);border:1px solid var(--line);border-radius:12px;color:var(--fg);
-    padding:13px 15px;font-size:15px;font-family:inherit;margin-bottom:18px}
-  input::placeholder,textarea::placeholder{color:var(--fg-faint)}
-  textarea{height:110px;resize:none}
-  .consent{display:flex;gap:11px;font-size:12.8px;color:var(--fg-dim);line-height:1.5;margin:2px 0 22px}
-  .consent .box{flex:none;width:17px;height:17px;border:1.5px solid var(--fg-faint);border-radius:5px;margin-top:1px}
-  .consent a{color:var(--fg);text-decoration:underline}
-  .submit{width:100%;border:0;cursor:pointer}
-  .under{margin-top:14px;text-align:center;color:var(--fg-faint);font-size:12.8px}
+  /* ---------- services index ---------- */
+  .svc{position:relative;z-index:1;padding-bottom:10vh}
+  .svc-head{display:flex;justify-content:space-between;align-items:flex-end;padding:0 4vw 4vh}
+  .svc-head h2{font-family:var(--disp);font-variation-settings:'wdth' 122;font-weight:870;
+    text-transform:uppercase;font-size:clamp(40px,7vw,104px);line-height:.9;letter-spacing:-.02em}
+  .svc-head h2 span{color:var(--red)}
+  .row{display:grid;grid-template-columns:10vw 1fr 30vw 6vw;align-items:center;gap:2vw;
+    border-top:1px solid var(--line-strong);padding:4.2vh 4vw;position:relative;transition:background .25s}
+  .row:last-child{border-bottom:1px solid var(--line-strong)}
+  .row:hover{background:#0d0b09}
+  .row .no{font-size:12px;letter-spacing:.3em;color:var(--faint)}
+  .row h3{font-family:var(--disp);font-variation-settings:'wdth' 120;font-weight:850;text-transform:uppercase;
+    font-size:clamp(30px,4.4vw,64px);line-height:.95;letter-spacing:-.015em}
+  .row:hover h3{color:var(--red)}
+  .row .desc .t{display:block;color:var(--ink);font-weight:500;font-size:14.5px;margin-bottom:10px;letter-spacing:.02em}
+  .row .desc p{color:var(--dim);font-size:13.5px;line-height:1.65}
+  .row .arr{font-size:30px;color:var(--faint);text-align:right}
+  .row:hover .arr{color:var(--red)}
 
-  /* footer */
-  footer{padding:64px 48px 40px}
-  .f-wrap{max-width:1280px;margin:0 auto}
-  .trust{display:flex;justify-content:space-between;align-items:center;gap:24px;padding-bottom:34px;border-bottom:1px solid var(--line);flex-wrap:wrap}
-  .trust b{font-size:17px;font-weight:700}
-  .trust b span{color:var(--red)}
-  .trust p{color:var(--fg-dim);font-size:14px}
-  .f-bottom{display:flex;justify-content:space-between;align-items:center;gap:20px;padding-top:26px;color:var(--fg-faint);font-size:13px;flex-wrap:wrap}
-  .f-bottom a{color:var(--fg-dim);text-decoration:none;margin-left:22px}
+  /* ---------- contact ---------- */
+  .contact{position:relative;z-index:1;border-top:1px solid var(--line-strong);
+    display:grid;grid-template-columns:1.1fr 1fr}
+  .ct-l{padding:12vh 4vw;border-right:1px solid var(--line)}
+  .ct-l h2{font-family:var(--disp);font-variation-settings:'wdth' 122;font-weight:880;text-transform:uppercase;
+    font-size:clamp(54px,7.4vw,118px);line-height:.86;letter-spacing:-.02em}
+  .ct-l h2 .outline{color:transparent;-webkit-text-stroke:2px var(--red)}
+  .ct-l .lead{margin-top:4vh;max-width:380px;color:var(--dim);font-size:15px;line-height:1.7}
+  .ct-l .lead b{color:var(--ink);font-weight:500}
+  .ct-list{margin-top:7vh}
+  .ct-list a{display:flex;justify-content:space-between;align-items:baseline;text-decoration:none;
+    border-top:1px solid var(--line);padding:18px 0;color:var(--ink)}
+  .ct-list a:last-child{border-bottom:1px solid var(--line)}
+  .ct-list .v{font-size:19px;font-weight:500;letter-spacing:.01em}
+  .ct-list .k{font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--faint)}
+  .ct-r{padding:12vh 4vw;display:flex;flex-direction:column;justify-content:center}
+  .fld{margin-bottom:34px}
+  .fld label{display:block;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--faint);margin-bottom:6px}
+  .fld input,.fld textarea{width:100%;background:transparent;border:0;border-bottom:1px solid var(--line-strong);
+    padding:10px 0 14px;color:var(--ink);font-size:17px;font-family:var(--body)}
+  .fld input::placeholder,.fld textarea::placeholder{color:var(--faint)}
+  .fld textarea{height:64px;resize:none}
+  .consent{display:flex;gap:12px;font-size:12px;color:var(--dim);line-height:1.6;margin:4px 0 36px}
+  .consent .box{flex:none;width:15px;height:15px;border:1px solid var(--faint);margin-top:2px}
+  .consent u{color:var(--ink)}
+  .send{display:flex;align-items:center;justify-content:space-between;width:100%;background:var(--red);
+    border:0;color:#fff;font-family:var(--body);font-size:12.5px;letter-spacing:.24em;text-transform:uppercase;
+    font-weight:500;padding:24px 28px;cursor:pointer}
+  .send i{font-style:normal;font-size:18px;letter-spacing:0}
+  .send:hover{background:var(--red-hot)}
+  .under{margin-top:16px;font-size:11.5px;letter-spacing:.08em;color:var(--faint)}
+
+  /* ---------- footer ---------- */
+  footer{position:relative;z-index:1;border-top:1px solid var(--line-strong);overflow:hidden}
+  .f-meta{display:flex;justify-content:space-between;gap:30px;padding:34px 4vw;flex-wrap:wrap}
+  .f-meta .mono b{color:var(--ink);font-weight:500}
+  .f-meta a{color:var(--dim);text-decoration:none;font-size:11px;letter-spacing:.24em;text-transform:uppercase;margin-left:28px}
+  .f-word{font-family:var(--disp);font-variation-settings:'wdth' 125;font-weight:880;text-transform:uppercase;
+    font-size:13.2vw;line-height:.72;letter-spacing:-.02em;text-align:center;white-space:nowrap;
+    margin-bottom:-3.4vw;color:#1a1611}
+  .f-word b{color:var(--red);font-weight:880}
 </style>
 </head>
 <body>
 
+<div class="cols"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+
 <header>
-  <a class="logo" href="#"><b>red<span>&nbsp;baron</span></b><small>Werbeagentur · Kevelaer</small></a>
-  <nav>
-    <a class="active" href="#">Start</a>
-    <a href="#leistungen">Leistungen</a>
-    <a href="#kontakt">Kontakt</a>
-    <div class="lang"><span class="on">DE</span><span>EN</span></div>
-    <a class="btn" href="#kontakt">Projekt anfragen</a>
-  </nav>
-  <div class="progress"></div>
+  <div class="h-logo">red&nbsp;<b>baron</b></div>
+  <div class="h-meta">
+    <a class="on" href="#">Index</a><a href="#leistungen">Leistungen</a><a href="#kontakt">Kontakt</a>
+  </div>
+  <div class="h-lang"><span class="on">DE</span><span>EN</span></div>
+  <a class="h-cta" href="#kontakt">Projekt anfragen</a>
 </header>
 
 <section class="hero">
-  <div class="contrail"></div>
-  <div class="kicker">Werbeagentur am Niederrhein — seit 2003</div>
-  <h1>Sichtbar<span class="dot">.</span><span class="alt">Anders.</span></h1>
-  <p class="sub">Webdesign, Marken &amp; Marketing vom Niederrhein — inhabergeführt seit 2003. Kein Callcenter, keine Praktikanten-Schleife: Sie sprechen direkt mit dem Inhaber.</p>
-  <div class="hero-cta">
-    <a class="btn btn-lg" href="#kontakt">Projekt anfragen</a>
-    <a class="ghost" href="#leistungen">Leistungen ansehen&nbsp;→</a>
+  <div class="orb"></div>
+  <div class="hero-top">
+    <p class="mono">Werbeagentur<br>Kevelaer — Niederrhein<br>Inhabergeführt seit 2003</p>
   </div>
-  <div class="scroll-hint"><i></i> Mehr sehen</div>
+  <div class="hero-sub">
+    <span class="mono">— Das hier ist unser Beweis</span>
+    Webdesign, Marken &amp; Marketing vom Niederrhein. <b>Kein Callcenter, keine Praktikanten-Schleife:</b> Sie sprechen direkt mit dem Inhaber.
+  </div>
+  <h1>
+    Sichtbar<span class="dot">.</span>
+    <span class="l2"><span class="outline">Anders.</span><span class="tag">EST. 2003 — KEVELAER (DE)</span></span>
+  </h1>
+  <div class="hero-bar">
+    <span class="mono"><b>↓</b>&nbsp;&nbsp;Scrollen</span>
+    <span class="mono">Webdesign · Corporate Design · Marketing · Print</span>
+    <span class="mono">Direkter Draht — <b>02832 974222</b></span>
+  </div>
 </section>
 
-<section id="leistungen">
-  <div class="sec-head">
-    <div><span class="num">01 — LEISTUNGEN</span>
-      <h2>Werbung, die <em>sitzt.</em></h2></div>
-    <p>Vier Disziplinen, ein Anspruch: dass Ihr Unternehmen so gut aussieht, wie es wirklich ist.</p>
+<div class="marquee">
+  <span>Webdesign <b>✕</b> Corporate Design <b>✕</b> Marketing &amp; Markenaufbau <b>✕</b> Print <b>✕</b> Webdesign <b>✕</b> Corporate Design <b>✕</b> Marketing <b>✕</b></span>
+</div>
+
+<section class="mani">
+  <p class="mono">01 — Haltung</p>
+  <p class="big"><span class="ghost">Gute Arbeit allein reicht nicht.</span> Wir machen aus Betrieben Marken, <em>die man nicht übersieht</em> — am Niederrhein und überall sonst.</p>
+  <div class="sig"><i></i><span class="mono">Tobias Kolesnyk, Inhaber</span></div>
+</section>
+
+<section class="svc" id="leistungen">
+  <div class="svc-head">
+    <h2>Werbung,<br>die <span>sitzt.</span></h2>
+    <p class="mono">02 — Leistungen<br>(04 Disziplinen)</p>
   </div>
-  <div class="grid">
-    <div class="card"><span class="idx">/ 01</span>
-      <h3>Webdesign</h3><h4>Der erste Händedruck Ihrer Firma</h4>
-      <p>Bevor jemand Sie anruft, googelt er Sie. Wir bauen Websites, die diesen ersten Moment gewinnen — schnell, klar und so überzeugend, dass aus Besuchern Anfragen werden. Diese Seite hier? Ist unser Beweis.</p>
-      <a href="#kontakt">Zeigen Sie mir meine Website-Chancen</a></div>
-    <div class="card"><span class="idx">/ 02</span>
-      <h3>Corporate Design</h3><h4>Unverwechselbar werden</h4>
-      <p>Ein gutes Erscheinungsbild macht aus einem Betrieb eine Marke, die man wiedererkennt — auf dem Firmenwagen, der Visitenkarte, dem Bildschirm. Wir geben Ihrem Unternehmen ein Gesicht, das bleibt.</p>
-      <a href="#kontakt">Wie wirkt mein Auftritt heute?</a></div>
-    <div class="card"><span class="idx">/ 03</span>
-      <h3>Marketing &amp; Markenaufbau</h3><h4>Vom Geheimtipp zur ersten Wahl</h4>
-      <p>Gute Arbeit allein reicht nicht — die richtigen Leute müssen davon erfahren. Wir entwickeln mit Ihnen eine Marke und Strategie, die Schritt für Schritt Vertrauen aufbaut. Auch, wenn Sie ganz am Anfang stehen.</p>
-      <a href="#kontakt">Erzählen Sie uns von Ihrer Idee</a></div>
-    <div class="card"><span class="idx">/ 04</span>
-      <h3>Print</h3><h4>Was man in der Hand hält, bleibt im Kopf</h4>
-      <p>In einer Welt voller Bildschirme ist Gedrucktes ein Statement. Broschüren, Geschäftsausstattung, Drucksachen — gestaltet, dass man Qualität fühlt, bevor man sie liest. Digital und Print aus einer Hand.</p>
-      <a href="#kontakt">Was soll Ihr nächstes Druckstück erreichen?</a></div>
+  <div class="row">
+    <span class="no">/ 01</span>
+    <h3>Webdesign</h3>
+    <div class="desc"><span class="t">Der erste Händedruck Ihrer Firma</span>
+      <p>Bevor jemand Sie anruft, googelt er Sie. Websites, die diesen ersten Moment gewinnen — schnell, klar, überzeugend.</p></div>
+    <span class="arr">→</span>
+  </div>
+  <div class="row">
+    <span class="no">/ 02</span>
+    <h3>Corporate Design</h3>
+    <div class="desc"><span class="t">Unverwechselbar werden</span>
+      <p>Ein Gesicht, das bleibt — auf dem Firmenwagen, der Visitenkarte, dem Bildschirm. Seit 2003 am Niederrhein.</p></div>
+    <span class="arr">→</span>
+  </div>
+  <div class="row">
+    <span class="no">/ 03</span>
+    <h3>Marketing &amp;<br>Markenaufbau</h3>
+    <div class="desc"><span class="t">Vom Geheimtipp zur ersten Wahl</span>
+      <p>Strategie und Marke, die Schritt für Schritt Vertrauen aufbauen. Auch, wenn Sie ganz am Anfang stehen.</p></div>
+    <span class="arr">→</span>
+  </div>
+  <div class="row">
+    <span class="no">/ 04</span>
+    <h3>Print</h3>
+    <div class="desc"><span class="t">Was man in der Hand hält, bleibt im Kopf</span>
+      <p>In einer Welt voller Bildschirme ist Gedrucktes ein Statement. Digital und Print aus einer Hand.</p></div>
+    <span class="arr">→</span>
   </div>
 </section>
 
 <section class="contact" id="kontakt">
-  <div class="c-wrap">
-    <div class="c-left">
-      <span class="num">02 — KONTAKT</span>
-      <h2>Lassen Sie uns reden. <em>Direkt mit Tobias.</em></h2>
-      <p class="lead">Kein Callcenter, kein Vertrieb — Ihre Nachricht landet direkt bei mir. Unverbindlich, kostenlos und auf Wunsch bei einem Kaffee in Kevelaer.</p>
-      <div class="c-direct">
-        <div><span class="ic">✆</span><div><b>02832 974222</b><small>Direkter Draht — Sie sprechen mit dem Inhaber</small></div></div>
-        <div><span class="ic">@</span><div><b>tk@red-baron.de</b><small>Antwort innerhalb von 24 Stunden (werktags)</small></div></div>
-        <div><span class="ic">⌂</span><div><b>Ahornweg 26, 47624 Kevelaer</b><small>Am Niederrhein zuhause — seit 2003</small></div></div>
-      </div>
+  <div class="ct-l">
+    <p class="mono" style="margin-bottom:4vh">03 — Kontakt</p>
+    <h2>Reden<br>wir<span class="outline">.</span></h2>
+    <p class="lead"><b>Direkt mit Tobias.</b> Kein Callcenter, kein Vertrieb — Ihre Nachricht landet bei mir. Unverbindlich, kostenlos, auf Wunsch bei einem Kaffee in Kevelaer.</p>
+    <div class="ct-list">
+      <a href="#"><span class="v">02832 974222</span><span class="k">Telefon</span></a>
+      <a href="#"><span class="v">tk@red-baron.de</span><span class="k">E-Mail</span></a>
+      <a href="#"><span class="v">Ahornweg 26, 47624 Kevelaer</span><span class="k">Studio</span></a>
     </div>
-    <form>
-      <div class="f-row">
-        <div><label>Name *</label><input placeholder="Ihr Name"></div>
-        <div><label>E-Mail *</label><input placeholder="ihre@email.de"></div>
-      </div>
-      <label>Telefon (optional — falls Sie lieber telefonieren)</label>
-      <input placeholder="0123 456789">
-      <label>Nachricht *</label>
-      <textarea placeholder="Erzählen Sie kurz, worum es geht — zwei Sätze reichen."></textarea>
-      <div class="consent"><span class="box"></span><span>Ihre Daten nutze ich ausschließlich, um Ihre Anfrage zu beantworten — keine Newsletter, keine Weitergabe. Details: <a href="#">Datenschutzerklärung</a></span></div>
-      <button class="btn btn-lg submit">Nachricht an Tobias senden</button>
-      <p class="under">Unverbindlich &amp; kostenlos · Persönliche Antwort innerhalb von 24 Stunden</p>
-    </form>
+  </div>
+  <div class="ct-r">
+    <div class="fld"><label>Name *</label><input placeholder="Ihr Name"></div>
+    <div class="fld"><label>E-Mail *</label><input placeholder="ihre@email.de"></div>
+    <div class="fld"><label>Nachricht *</label><textarea placeholder="Erzählen Sie kurz, worum es geht — zwei Sätze reichen."></textarea></div>
+    <div class="consent"><span class="box"></span><span>Ihre Daten nutze ich ausschließlich, um Ihre Anfrage zu beantworten — keine Newsletter, keine Weitergabe. Details: <u>Datenschutzerklärung</u></span></div>
+    <button class="send">Nachricht an Tobias senden <i>→</i></button>
+    <p class="under">Unverbindlich &amp; kostenlos — persönliche Antwort innerhalb von 24 Stunden (werktags).</p>
   </div>
 </section>
 
 <footer>
-  <div class="f-wrap">
-    <div class="trust">
-      <b>red<span> baron</span> werbeagentur</b>
-      <p>Inhabergeführt am Niederrhein — seit 2003. · Ahornweg 26, 47624 Kevelaer · 02832 974222</p>
-    </div>
-    <div class="f-bottom">
-      <span>Gestaltet &amp; entwickelt in Kevelaer. · Diese Seite lädt in unter einer Sekunde. Ihre auch?</span>
-      <span><a href="#">Impressum</a><a href="#">Datenschutz</a></span>
-    </div>
+  <div class="f-meta">
+    <span class="mono">red baron werbeagentur — <b>Inhabergeführt am Niederrhein, seit 2003</b></span>
+    <span class="mono">Diese Seite lädt in unter einer Sekunde. <b>Ihre auch?</b></span>
+    <span><a href="#">Impressum</a><a href="#">Datenschutz</a></span>
   </div>
+  <div class="f-word">red&nbsp;<b>baron</b></div>
 </footer>
 
 </body>
