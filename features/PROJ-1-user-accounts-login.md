@@ -1,6 +1,6 @@
 # PROJ-1: User Accounts & Login (local)
 
-## Status: Planned
+## Status: In Progress
 **Created:** 2026-06-12
 **Last Updated:** 2026-06-12
 
@@ -115,6 +115,47 @@ Sessions live in the database (not just in the cookie) on purpose: when an admin
 ### Out of Scope (later features)
 - HTTPS on the LAN and backup automation → handled in the deployment phase (PRD operations requirements).
 - Chat/document data models → PROJ-2 and PROJ-4.
+
+## Frontend Implementation (Frontend Developer)
+**Implemented:** 2026-06-12 — UI layer only; backend APIs (SQLite, sessions, hashing) are built in `/backend`.
+
+### What was built
+German UI for all PROJ-1 flows, composed entirely from existing shadcn/ui primitives (no custom UI widgets reinvented):
+
+- **First-run setup (`Ersteinrichtung`)** — `src/components/auth/setup-form.tsx`. Creates the initial Admin (Anzeigename, Benutzername, optional E-Mail, Passwort + Wiederholung, min. 8 chars). Shown only when the session check reports `setupRequired`.
+- **Login (`Anmelden`)** — `src/components/auth/login-form.tsx`. Username/email + password; generic German error on failure ("Benutzername oder Passwort ist falsch."); supports server-provided lockout/lock messages via the API error body. Password field is cleared on failure.
+- **Forced password change** — the change-password dialog runs in `forced` mode (non-dismissible) when the logged-in user has `mustChangePassword` (after an admin reset).
+- **Passwort ändern dialog** — `src/components/auth/change-password-dialog.tsx`. Current + new + confirm, mismatch/new-equals-current validation; toast on success.
+- **App shell** — `src/components/app-shell.tsx`. Responsive sidebar (desktop) / Sheet (mobile), user menu with avatar initials, role badge, "Passwort ändern" and "Abmelden". Admin-only "Benutzerverwaltung" nav item.
+- **Benutzerverwaltung (Admins only)** — `src/components/admin/user-management.tsx`: user table (name, login, role, status) with loading skeletons, empty and error states; per-user dropdown actions (reset password, change role, deactivate/reactivate) with confirm dialogs for destructive/irreversible changes.
+  - **Benutzer anlegen** — `src/components/admin/create-user-dialog.tsx`.
+  - **Passwort zurücksetzen** — `src/components/admin/reset-password-dialog.tsx`: confirms, then shows the generated temporary password once with copy-to-clipboard for in-person handover.
+  - **Last-admin protection** mirrored in the UI (disabled actions + explanatory note); server still enforces it.
+
+### Supporting files
+- `src/lib/auth-types.ts` — shared types / API contract (`AuthUser`, `SessionResponse`, roles).
+- `src/lib/api-client.ts` — same-origin JSON fetch helper; surfaces server German error messages, never calls external origins.
+- `src/hooks/use-session.ts` — loads `GET /api/auth/session` (drives setup vs. login vs. app gating; re-fetch enables the "deactivated/expired within ~1 min" behavior on next interaction).
+- `src/hooks/use-users.ts` — loads `GET /api/admin/users`.
+- `src/app/page.tsx` — orchestrates setup → login → forced-change → app shell (chat placeholder / admin).
+- `src/app/layout.tsx` — `lang="de"`, sonner `<Toaster />` mounted.
+- `src/components/ui/dialog.tsx` — extended `DialogContent` with an optional `showCloseButton` prop (default true; used to make the forced password dialog non-dismissible). Backward compatible.
+
+### API contract expected from `/backend`
+- `GET /api/auth/session` → `{ authenticated, setupRequired, user }`
+- `POST /api/auth/setup` → `{ user }` (initial admin)
+- `POST /api/auth/login` `{ login, password }` → `{ user }`; German error in `{ error }` on failure/lockout
+- `POST /api/auth/logout`
+- `POST /api/auth/change-password` `{ currentPassword, newPassword }`
+- `GET /api/admin/users` → `{ users }`
+- `POST /api/admin/users` `{ displayName, login, email, password, role }`
+- `PATCH /api/admin/users/:id` `{ active?, role? }`
+- `POST /api/admin/users/:id/reset-password` → `{ temporaryPassword }`
+
+### Notes / deviations
+- Server-side enforcement of role gating, last-admin protection, lockout, and session validity is **required** in `/backend`; the UI mirrors these for UX but is not the security boundary (Members are redirected client-side, but direct API access must be blocked server-side).
+- Chat view is a placeholder (PROJ-2).
+- Verified with `tsc --noEmit` (clean) and `next build` (success). Note: the template has no ESLint flat config yet, so `next lint`/`eslint` cannot run — a project setup gap unrelated to this feature.
 
 ## QA Test Results
 _To be added by /qa_
