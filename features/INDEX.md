@@ -12,7 +12,7 @@
 
 | ID | Feature | Status | Spec | Created |
 |----|---------|--------|------|---------|
-| PROJ-1 | User Accounts & Login (local) | Planned | [PROJ-1-user-accounts-login.md](PROJ-1-user-accounts-login.md) | 2026-06-12 |
+| PROJ-1 | User Accounts & Login (local) | In Progress | [PROJ-1-user-accounts-login.md](PROJ-1-user-accounts-login.md) | 2026-06-12 |
 | PROJ-2 | AI Chat Assistant (local LLM) | Planned | [PROJ-2-ai-chat-assistant.md](PROJ-2-ai-chat-assistant.md) | 2026-06-12 |
 | PROJ-3 | German Business Writing Assistant | Planned | [PROJ-3-business-writing-assistant.md](PROJ-3-business-writing-assistant.md) | 2026-06-12 |
 | PROJ-4 | Document Upload & Management | Planned | [PROJ-4-document-management.md](PROJ-4-document-management.md) | 2026-06-12 |

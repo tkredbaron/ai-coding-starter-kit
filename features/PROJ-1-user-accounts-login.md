@@ -54,7 +54,67 @@ Local user accounts for a small KMU team (2–15 people), stored entirely on the
 <!-- Sections below are added by subsequent skills -->
 
 ## Tech Design (Solution Architect)
-_To be added by /architecture_
+**Designed:** 2026-06-12
+
+### Big Picture
+Everything runs inside the Next.js app on the Mac mini. There is no cloud and no separate auth service: the app itself checks passwords and manages sessions, and stores all account data in a single local database file (SQLite) on the Mac mini. The Ollama LLM is a separate local program on the same machine; it is **not** involved in login at all — authentication stays fast even when the LLM is busy.
+
+> **Why not Supabase?** The starter kit's default (cloud Supabase) is excluded by our 100%-local rule. Self-hosting Supabase in Docker would cost 2–4 GB of RAM permanently — RAM the LLM needs. SQLite is one file, needs zero administration, handles 15 users effortlessly, and makes backups trivial (copy one file).
+
+### Component Structure
+```
+App
++-- First-Run Setup Page ("Ersteinrichtung")     – only when no admin exists yet
+|   +-- Create Initial Admin Form
++-- Login Page ("Anmelden")
+|   +-- Login Form (username/email + password)
+|   +-- Lockout / error notices (German)
++-- App Shell (everything behind login)
+|   +-- Sidebar with user menu
+|       +-- "Passwort ändern" Dialog
+|       +-- "Abmelden" Button
++-- Admin Area ("Benutzerverwaltung")            – Admins only
+    +-- User Table (name, login, role, status)
+    +-- "Benutzer anlegen" Dialog
+    +-- Per-User Actions (reset password, deactivate/reactivate, change role)
+    +-- "Last admin" protection notices
+```
+All forms reuse existing shadcn/ui components (form, input, dialog, table, alert, toast) — nothing custom is built.
+
+### Data Model (plain language)
+Stored in one local SQLite database file on the Mac mini (e.g. `data/app.db`):
+
+- **User:** display name, unique username and/or email, password (only as a salted hash — never readable), role (Admin/Member), active flag, "must change password at next login" flag, failed-login counter + lock-until timestamp, created date.
+- **Session:** random session ID, which user it belongs to, expiry date (default 7 days), created date. The browser holds only an unreadable, HTTP-only cookie with the session ID.
+
+Sessions live in the database (not just in the cookie) on purpose: when an admin deactivates a user, the very next request looks up the session, sees the user is inactive, and rejects it — that's how "logged out within 1 minute" is guaranteed.
+
+### How Login Works (in words)
+1. User submits username + password → app finds the account, compares against the stored hash.
+2. Wrong 5 times → account is locked for 15 minutes (generic German message, no hints).
+3. Correct → app creates a session record and sets the cookie; every later page request is checked against that session (fast: < a few ms in SQLite, independent of LLM load).
+4. "Abmelden" or admin deactivation deletes/invalidates the session record.
+5. Forgotten admin password → documented recovery: a small command run directly on the Mac mini (physical access) resets the admin password. No email needed.
+
+### Tech Decisions (why)
+| Decision | Choice | Why |
+|---|---|---|
+| Database | SQLite (single local file) | Zero admin, ~0 RAM overhead, perfect for 2–15 users, backup = copy one file. Also becomes the home for chats/documents in PROJ-2+. |
+| Auth approach | Own session-based login built into Next.js | No external identity provider allowed (offline). Industry-standard pattern: hashed passwords + database sessions + HTTP-only cookie. |
+| Password storage | Salted hashing (bcrypt) | Never stores readable passwords; tuned to stay well under the 500 ms login budget on the M4. |
+| Roles | Simple role field (Admin/Member) checked on the server for every admin action and the admin pages | Direct URL access by Members is blocked server-side, not just hidden in the UI. |
+| Ollama | Not involved in this feature | LLM connection is designed in PROJ-2; login must never wait on the LLM. |
+| Cloud Supabase client (`src/lib/supabase.ts`) | Will be removed/unused | Violates the 100%-local constraint; SQLite replaces it. |
+
+### Dependencies (new packages)
+- `better-sqlite3` — the local database engine
+- `drizzle-orm` — typed, readable access to the database
+- `bcryptjs` — password hashing
+- `zod` + `react-hook-form` — already installed; used for form validation
+
+### Out of Scope (later features)
+- HTTPS on the LAN and backup automation → handled in the deployment phase (PRD operations requirements).
+- Chat/document data models → PROJ-2 and PROJ-4.
 
 ## QA Test Results
 _To be added by /qa_
