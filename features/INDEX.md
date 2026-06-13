@@ -12,7 +12,7 @@
 
 | ID | Feature | Status | Spec | Created |
 |----|---------|--------|------|---------|
-| PROJ-1 | Design System & Global Layout | Planned | [PROJ-1-design-system-global-layout.md](PROJ-1-design-system-global-layout.md) | 2026-06-12 |
+| PROJ-1 | Design System & Global Layout | In Progress | [PROJ-1-design-system-global-layout.md](PROJ-1-design-system-global-layout.md) | 2026-06-12 |
 | PROJ-2 | Internationalization (DE/EN) | Planned | [PROJ-2-internationalization-de-en.md](PROJ-2-internationalization-de-en.md) | 2026-06-12 |
 | PROJ-3 | Cinematic Hero Section | Planned | [PROJ-3-cinematic-hero-section.md](PROJ-3-cinematic-hero-section.md) | 2026-06-12 |
 | PROJ-4 | Services Section | Planned | [PROJ-4-services-section.md](PROJ-4-services-section.md) | 2026-06-12 |
