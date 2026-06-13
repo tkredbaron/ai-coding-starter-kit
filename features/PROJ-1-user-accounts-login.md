@@ -157,6 +157,50 @@ German UI for all PROJ-1 flows, composed entirely from existing shadcn/ui primit
 - Chat view is a placeholder (PROJ-2).
 - Verified with `tsc --noEmit` (clean) and `next build` (success). Note: the template has no ESLint flat config yet, so `next lint`/`eslint` cannot run — a project setup gap unrelated to this feature.
 
+## Backend Implementation (Backend Developer)
+**Implemented:** 2026-06-13 — 100% local, no Supabase, no cloud, no external calls.
+
+### Stack & storage
+- **Database:** SQLite via `better-sqlite3` + `drizzle-orm`, single local file (default `data/app.db`, override with `DATABASE_PATH`). WAL mode + `foreign_keys = ON`. Schema is bootstrapped idempotently on cold start (`CREATE TABLE IF NOT EXISTS`), so the admin runs no migration step. `data/` is gitignored (contains credentials).
+- **Password hashing:** `bcryptjs`, 10 rounds (secure, well under the 500 ms login budget on the M4). Plaintext is never stored or returned (except the one-time temporary password on admin reset, by design).
+- **Sessions:** DB-backed (`sessions` table) with an opaque 256-bit token carried in an **HTTP-only**, `SameSite=lax` cookie (`kmu_session`), default 7-day lifetime (`SESSION_LIFETIME_DAYS`). `Secure` is intentionally off because this version runs over plain HTTP on the LAN (HTTPS is a deployment-phase concern); enabling it would lock everyone out. Every request re-validates the session against the DB, so an admin deactivation or session expiry takes effect on the very next request (the "within 1 minute" rule).
+
+### Data model
+- `users`: id, display_name, username (unique, case-insensitive), email (optional, unique when present), password_hash, role (admin/member), active, must_change_password, failed_attempts, locked_until, created_at. Unique indexes on `lower(username)` and `lower(email)`; helper indexes on username/email and (role, active).
+- `sessions`: id, user_id (FK → users ON DELETE CASCADE), expires_at, created_at. Indexes on user_id and expires_at.
+
+### API routes (match the frontend contract exactly)
+- `GET  /api/auth/session` → `{ authenticated, setupRequired, user }`
+- `POST /api/auth/setup` → creates initial admin + logs in; 409 once setup is done
+- `POST /api/auth/login` → `{ user }`; generic German error; account lockout after 5 failed attempts for 15 min (correct password still rejected during lock)
+- `POST /api/auth/logout` → ends session (DB + cookie)
+- `POST /api/auth/change-password` → requires current password; clears `mustChangePassword`
+- `GET  /api/admin/users` (admin) → `{ users }`
+- `POST /api/admin/users` (admin) → create user; 409 on duplicate username/email (incl. deactivated)
+- `PATCH /api/admin/users/:id` (admin) → `{ active?, role? }`; last-admin protection; deactivation drops the user's sessions
+- `POST /api/admin/users/:id/reset-password` (admin) → `{ temporaryPassword }`; forces change at next login, clears lock, invalidates sessions
+
+### Security enforcement (server-side, not just UI)
+- All Zod validation runs server-side (`src/lib/auth/validation.ts`); client validation is not trusted.
+- Role gating via `requireAdmin` guard — Members hitting admin endpoints directly get 403; unauthenticated get 401.
+- Generic login error never reveals account existence; lockout message gives no hint whether the password was otherwise correct.
+- Last-admin protection blocks deactivating or demoting the only active admin (409).
+- Min password length 8 enforced everywhere.
+
+### Forgotten-admin recovery (offline, physical access)
+- `scripts/reset-admin-password.mjs` (also `npm run reset-admin <login> <new-password>`): run directly on the Mac mini to reset/reactivate/promote an admin and force a password change at next login. No email needed.
+
+### Security headers
+- `next.config.ts` adds X-Frame-Options: DENY, X-Content-Type-Options: nosniff, Referrer-Policy: origin-when-cross-origin. `serverExternalPackages: ["better-sqlite3"]` keeps the native module out of the bundle.
+
+### Verification
+- `tsc --noEmit` clean; `next build` succeeds (all 9 API routes present as dynamic).
+- Manual end-to-end smoke test against the running server passed for: first-run setup + re-setup 409, login success/failure, 5-attempt lockout + correct-password-during-lock rejection, admin create + duplicate-username/email 409, member 403 on admin endpoints, unauth 401, admin password reset → forced change flow, last-admin deactivate/demote 409, deactivation invalidating an active session, logout, recovery CLI, and HttpOnly cookie + security headers.
+
+### Notes / deviations
+- The dormant `src/lib/supabase.ts` placeholder is left untouched (already a no-op `export const supabase = null`); it is unused and violates nothing at runtime. SQLite fully replaces it per the tech design.
+- `.env.local.example` updated: no cloud secrets; documents optional `DATABASE_PATH` and `SESSION_LIFETIME_DAYS`.
+
 ## QA Test Results
 _To be added by /qa_
 
